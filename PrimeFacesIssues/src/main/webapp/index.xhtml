@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <p:dataTable id="carsTable" 
+                         widgetVar="carsTable"
+                         var="item" 
+                         value="#{carBacking.items}" 
+                         rows="10" 
+                         sortOrder="descending"
+                         sortBy="#{item.id}"
+                         resizableColumns="true"
+                         draggableColumns="true"
+                         reflow="true"
+                         paginator="true" 
+                         paginatorPosition="bottom" 
+                         paginatorAlwaysVisible="false" 
+                         currentPageReportTemplate="Showing {startRecord} to {endRecord} out of {totalRecords}" 
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,20,40,80" 
+                         emptyMessage="No cars found with given criteria">
+
+                <f:facet name="header">
+                    <!-- Will be used as worksheet title and is therefore required by the Excel exporter -->
+                    <h:outputText value="Cars" style="display: none;" />
+                    <p:inputText id="globalFilter" onkeyup="PF('carsTable').filter()" placeholder="#{i18n['search.placeholder']}" />
+                </f:facet>
+
+                <p:column headerText="Name" sortBy="#{item.name}" filterBy="#{item.name}" filterStyle="display: none">
+                    <h:outputText value="#{item.name}"/>
+                </p:column>
+
+                <p:column exportable="false">
+                    <!--
+                    <p:splitButton value="#{i18n['view']}" action="#{carBacking.prepareView(item)}">
+                        <p:menuitem value="#{i18n['edit']}" action="#{carBacking.prepareEdit(item)}" />
+                        <p:separator />
+                        <p:menuitem value="#{i18n['delete']}" action="#{carBacking.delete(item)}" update="carsTable">
+                            <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+                        </p:menuitem>
+                    </p:splitButton>
+                    -->
+                </p:column>
+            </p:dataTable>
+
+            <p:commandButton value="Excel (XSL)" icon="fa fa-file-excel-o" ajax="false">
+                <p:dataExporter type="xls" target="carsTable" fileName="cars" />
+            </p:commandButton>
+            <p:commandButton value="Excel (XSLX)" icon="fa fa-file-excel-o" ajax="false">
+                <p:dataExporter type="xlsx" target="carsTable" fileName="cars" />
+            </p:commandButton>
+            <p:commandButton value="CSV" icon="fa fa-file-o" ajax="false">
+                <p:dataExporter type="csv" target="carsTable" fileName="cars" />
+            </p:commandButton>
+            <p:commandButton value="XML" icon="fa fa-file-code-o" ajax="false">
+                <p:dataExporter type="xml" target="carsTable" fileName="cars" />
+            </p:commandButton>
+            <p:commandButton value="PDF" icon="fa fa-file-pdf-o" ajax="false">
+                <p:dataExporter type="pdf" target="carsTable" fileName="cars"/>
+            </p:commandButton>
+
+        </h:form>    
+    </h:body>
+</html>
+
